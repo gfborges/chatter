@@ -46,13 +46,16 @@ public class Server extends Thread {
 	}
 	
 	public void sendToAll(BufferedWriter bfw, String msg) throws Exception {
+		
+		BufferedWriter bwS;
 		System.out.println(nome + " -> " +  msg);
-//		for(BufferedWriter bw : clients) {
-//			if(!(bw == bfw)) {
-//				bw.write(nome + " : " + msg + System.lineSeparator());
-//				bw.flush();
-//			}
-//		}
+		for(BufferedWriter bw : clients) {
+			bwS = (BufferedWriter)bw;
+			if(!(bfw == bwS)) {
+				bw.write(nome + " : " + msg + System.lineSeparator());
+				bw.flush();
+			}
+		}
 	}
 	
 	public void run() {
