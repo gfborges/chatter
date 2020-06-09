@@ -20,7 +20,7 @@ public class Main {
 				System.out.println("Eu: " + msg);
 				break;
 			case 2:
-				System.out.println("Other: messages");
+				conn.listen();
 				break;
 			case 3:
 				return;
