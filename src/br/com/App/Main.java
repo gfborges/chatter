@@ -27,7 +27,7 @@ public class Main {
 			default:
 				break;
 			}
-			ctrl.await();
+			ctrl.await(); 	
 		}
 	}
 	static void menu() {
