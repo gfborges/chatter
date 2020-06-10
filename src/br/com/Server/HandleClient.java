@@ -3,7 +3,7 @@ package br.com.Server;
 // essa classa é responsável por gerenciar a conexão com o cliente, ou seja, receber e replicar suas mensagens, tratar
 // possíveis erros e desconectar o cliente
 public class HandleClient extends Thread {
-	
+	final private static String WARNING = "\\warning";
 	private ClientInfo client;
 	private Server server;
 	
@@ -18,7 +18,7 @@ public class HandleClient extends Thread {
 		server.readClientName(client);
 		
 		// Informa a entrada do cliente à todos os outros conectados
-		server.broadcast(null, client.name + " entrou!");
+		server.broadcast(null, WARNING+ client.name + " entrou!");
 		
 		// adiciona o cliente na lista de clients conectados
 		server.clients.add(client);
@@ -27,7 +27,9 @@ public class HandleClient extends Thread {
 		while(true) {
 			try {
 				msg = client.reader.readLine(); // lê uma mensagem enviada pelo clientes
-				msg = client.name + ": " + msg; // concatena à mensagem o nome do cliente
+				if(msg == null) {
+					break;
+				}
 				System.out.println(msg); // log das mensagens enviadas
 				server.broadcast(client, msg); // replica a mensagem enviada
 			}
@@ -43,7 +45,7 @@ public class HandleClient extends Thread {
 		client.disconnect();
 
 		// Informa a entrada do cliente à todos os outros conectados
-		server.broadcast(null, client.name + " saiu!");
+		server.broadcast(null, WARNING+client.name + " saiu!");
 		
 	}
 }

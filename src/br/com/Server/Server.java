@@ -35,8 +35,6 @@ public class Server {
 	
 	// Envia uma mensagem ao cliente solicitando o seu nome
 	public void readClientName(ClientInfo client) {
-		client.writer.print("Digite seu nome: ");
-		client.writer.flush();
 		try {
 			client.name = client.reader.readLine();
 		}

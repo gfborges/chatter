@@ -6,21 +6,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
 
 public class ChatWindow {
 	private Client conn;
 	private JFrame frame;
 	private JPanel panel;
+	private JLabel labelName;
 	private JTextField msgField;
 	private JButton btnSend;
 	private JTextArea msgHistory;
 	
-	public ChatWindow(JFrame frame, JPanel panel, JTextField msgField, JTextArea msgHistory, JButton btnSend, Client conn) {
+	public ChatWindow(JFrame frame, JPanel panel, JTextField msgField, JTextArea msgHistory, JButton btnSend, Client conn, JLabel labelName) {
 		this.frame = frame;
 		this.msgHistory = msgHistory;
 		this.panel = panel;
+		this.labelName = labelName;
 		this.msgField = msgField;
 		this.btnSend = btnSend;
 		this.conn = conn;
@@ -28,7 +29,7 @@ public class ChatWindow {
 	
 	public static ChatWindow open(Client conn, final String name) {
 		// window frame
-		JFrame frame = new JFrame("chatter");
+		JFrame frame = new JFrame("chatter - " + name);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(400,400);
 		
@@ -38,6 +39,7 @@ public class ChatWindow {
 		
 		// lower panel txt field + send btn
 		JPanel panel = new JPanel();
+		JLabel labelName = new JLabel(name+":");
 		JTextField msgField = new JTextField(15);
 		JButton btnSend  = new JButton("SEND");
 		
@@ -46,7 +48,7 @@ public class ChatWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String msg = name +": " + msgField.getText();
+					String msg = String.format("%s %s", labelName.getText() ,msgField.getText());
 					conn.send(msg);
 					msgHistory.append(msg + System.lineSeparator());
 					msgField.setText("");
@@ -55,6 +57,7 @@ public class ChatWindow {
 				}
 			}
 		});
+		panel.add(labelName);
 		panel.add(msgField);
 		panel.add(btnSend);
 		
@@ -64,7 +67,6 @@ public class ChatWindow {
 		frame.getRootPane().setDefaultButton(btnSend);
 		frame.addWindowListener(new WindowAdapter() {
 		    public void WindowClosing(WindowEvent e) throws Exception {
-		        conn.send("%sair%");
 		    	conn.close();
 		        frame.dispose();
 		    }
@@ -73,7 +75,7 @@ public class ChatWindow {
 		    }
 		});
 		frame.setVisible(true);
-		return new ChatWindow(frame, panel, msgField, msgHistory, btnSend, conn);
+		return new ChatWindow(frame, panel, msgField, msgHistory, btnSend, conn, labelName);
 	}
 
     public JTextArea getMsgHistory(){
