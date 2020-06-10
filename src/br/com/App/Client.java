@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import javax.swing.JTextArea;
 
 public class Client {
 	private final static int SECRET = 13;
@@ -14,6 +15,7 @@ public class Client {
 	private InputStreamReader inr;
 	private BufferedReader bfr;
 	private PrintWriter pw;
+    private JTextArea msgHistory;
 
 	public Client(String ip, int door) throws Exception {
 		this.socket = new Socket(ip, door);
@@ -24,8 +26,10 @@ public class Client {
 	}
 	
 	public void send(String msg) throws Exception {
-		String msgEncoded = encrypt(msg);
-		pw.println(msgEncoded);
+		if(!"%sair%".equalsIgnoreCase(msg)) {
+			msg = encrypt(msg);
+		}
+		pw.println(msg);
 	}
 
 	private static String encrypt(String msg) {
@@ -46,18 +50,13 @@ public class Client {
 		return s;
 	}
 
-	public void listen() throws IOException{
-		String msg;
-		this.bfr = new BufferedReader(inr);
-//		while(!"Sair".equalsIgnoreCase(msg)) {                               
-			if(bfr.ready()){
-				msg = bfr.readLine();
-				if(msg.equals("Sair"))
-					System.out.println("Servidor caiu!");
-				else
-					System.out.println(decrypt(msg));         
-			}
-//		}
+	public String listen() throws IOException{
+		String msg = null;                        
+		if(bfr.ready()){
+			msg = bfr.readLine();
+			return decrypt(msg);     
+		}
+		return msg;
 	}
 	
 	public void close() {
