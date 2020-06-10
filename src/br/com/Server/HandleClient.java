@@ -20,7 +20,7 @@ public class HandleClient extends Thread {
 		// Informa a entrada do cliente à todos os outros conectados
 		server.broadcast(null, client.name + " entrou!");
 		
-		// por fim adiciona o cliente na lista de clients conectados
+		// adiciona o cliente na lista de clients conectados
 		server.clients.add(client);
 		
 		String msg;
