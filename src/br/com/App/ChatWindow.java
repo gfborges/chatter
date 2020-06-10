@@ -34,7 +34,8 @@ public class ChatWindow {
 		
 		// msg history
 		final JTextArea msgHistory = new JTextArea();
-				
+		msgHistory.setEditable(false);
+		
 		// lower panel txt field + send btn
 		JPanel panel = new JPanel();
 		JTextField msgField = new JTextField(15);
@@ -83,7 +84,6 @@ public class ChatWindow {
 		@Override
 		public void run() {
 			String msg = null;
-			//JTextArea msgHistory = cw.getMsgHistory();
 			while(true) {
 				try {
 					msg = conn.listen();
