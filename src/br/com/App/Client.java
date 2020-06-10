@@ -1,51 +1,67 @@
 package br.com.App;
 
-import java.io.BufferedWriter;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
-
-import br.com.Server.Server;
 
 public class Client {
 	private final static int SECRET = 13;
 	private Socket socket;
-	private OutputStream ou;
-	private OutputStreamWriter ouw;
-	private BufferedWriter bfw;
-	
+	private InputStream in;
+	private InputStreamReader inr;
+	private BufferedReader bfr;
+	private PrintWriter pw;
+
 	public Client(String ip, int door) throws Exception {
 		this.socket = new Socket(ip, door);
-		this.ou = socket.getOutputStream();
-		this.ouw = new OutputStreamWriter(ou);
-		this.bfw = new BufferedWriter(ouw);
+		this.in = socket.getInputStream();
+		this.inr = new InputStreamReader(in);
+		this.bfr = new BufferedReader(inr);
+		this.pw = new PrintWriter(socket.getOutputStream(), true);
 	}
 	
 	public void send(String msg) throws Exception {
 		String msgEncoded = encrypt(msg);
-		if(socket.isClosed()) {
-			System.out.println("Socket is Closed");
-			return;
-		}
-		bfw.write(msgEncoded + System.lineSeparator());
-		bfw.flush();
+		pw.println(msgEncoded);
 	}
-	
+
 	private static String encrypt(String msg) {
-		return secret(msg, 1);
+		return secret(msg, SECRET);
 	}
 	
 	private static String decrypt(String msg) {
-		return secret(msg, -1);
+		return secret(msg, -SECRET);
 	}
 	
 	private static String secret(String msg, int method) {
 		char[] msgEncoded = new char[msg.length()];
 		int i = 0;
 		for(char ch : msg.toCharArray()) {
-			msgEncoded[i++] = (char) (Character.getNumericValue(ch) + (SECRET * method) ); 
+			msgEncoded[i++] = (char) ((int) ch + method); 
 		}
-		return new String(msgEncoded);
+		String s = new String(msgEncoded);
+		return s;
 	}
 
+	public void listen() throws IOException{
+		String msg;
+		this.bfr = new BufferedReader(inr);
+//		while(!"Sair".equalsIgnoreCase(msg)) {                               
+			if(bfr.ready()){
+				msg = bfr.readLine();
+				if(msg.equals("Sair"))
+					System.out.println("Servidor caiu!");
+				else
+					System.out.println(decrypt(msg));         
+			}
+//		}
+	}
+	
+	public void close() {
+		pw.println("");
+		pw.close();
+	}
 }
