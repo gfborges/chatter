@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class ChatWindow {
 	private Client conn;
@@ -36,6 +37,9 @@ public class ChatWindow {
 		// msg history
 		final JTextArea msgHistory = new JTextArea();
 		msgHistory.setEditable(false);
+		msgHistory.setLineWrap(true);
+		msgHistory.setWrapStyleWord(true);
+		JScrollPane msgHistScroll = new JScrollPane(msgHistory);
 		
 		// lower panel txt field + send btn
 		JPanel panel = new JPanel();
@@ -55,7 +59,7 @@ public class ChatWindow {
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-			}
+			}		
 		});
 		panel.add(labelName);
 		panel.add(msgField);
@@ -70,6 +74,8 @@ public class ChatWindow {
 		    	conn.close();
 		        frame.dispose();
 		    }
+		});
+		frame.addWindowListener(new WindowAdapter() {
 		    public void WindowOpened(WindowEvent e) {
 		    	msgField.requestFocus();
 		    }

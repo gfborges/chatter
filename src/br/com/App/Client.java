@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class Client {
 	private final static int SECRET = 13;
@@ -18,9 +20,11 @@ public class Client {
 	public Client(String ip, int door) throws Exception {
 		this.socket = new Socket(ip, door);
 		this.in = socket.getInputStream();
-		this.inr = new InputStreamReader(in);
+		this.inr = new InputStreamReader(in, StandardCharsets.UTF_8);
 		this.bfr = new BufferedReader(inr);
-		this.pw = new PrintWriter(socket.getOutputStream(), true);
+		this.pw = new PrintWriter(
+				new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true
+		);
 	}
 	
 	public void send(String msg)throws Exception {

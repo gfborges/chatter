@@ -3,8 +3,10 @@ package br.com.Server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class ClientInfo {
 	
@@ -18,9 +20,10 @@ public class ClientInfo {
 		this.conn = conn;
 		this.server = server;
 		this.reader = new BufferedReader(
-			new InputStreamReader(conn.getInputStream())
+			new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8)
 		);
-		this.writer = new PrintWriter(conn.getOutputStream(), true);
+		this.writer = new PrintWriter(
+				new OutputStreamWriter(conn.getOutputStream(), StandardCharsets.UTF_8), true);
 	}
 	
 	public void disconnect() {
