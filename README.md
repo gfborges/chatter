@@ -1,5 +1,8 @@
-# CHATTER 
-Um chat feito em java como exercício da aula de POO do professor Gerson
+# Programação Orientada a Objetos
+Um chat feito em java como exercício proposto da lisa 4 de POO.
+
+## Professores
+* Gerson P. Neto
 
 # Download
 Para baixe a versão mais recente [neste link](https://github.com/gfborges/chatter/releases)
