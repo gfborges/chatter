@@ -1,5 +1,5 @@
 # Programação Orientada a Objetos
-Um chat feito em java como exercício proposto da lisa 4 de POO.
+Um chat feito em java como exercício proposto da lista 4 de POO.
 
 # Professor
 * Gerson P. Neto
